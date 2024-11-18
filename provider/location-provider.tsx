@@ -129,7 +129,7 @@ export const LocationProvider = ({
     if (socket) {
       // roomCreated
       socket.on("roomCreated", (data: userRoom) => {
-        toast.success("You are live!", {
+        toast.success("Your location is live!", {
           autoClose: 2000,
         });
         // setRoomInfo(data);
@@ -153,33 +153,6 @@ export const LocationProvider = ({
         setHostRoom(null);
       });
 
-      socket.on("userJoinedRoom", (data) => {
-        setHostRoom((prev) => {
-          if (prev) {
-            return {
-              ...prev,
-              totalConnectedUsers: prev.totalConnectedUsers.find(
-                (user) => user.userId === data.userId
-              )
-                ? prev.totalConnectedUsers
-                : [...prev.totalConnectedUsers, data],
-            };
-          }
-          return null;
-        });
-        // setVisitorRoomInfo(data);
-
-        toast.info(`${data.userName} joined the room`, {
-          autoClose: 2000,
-        });
-
-        if (hostRooom?.position) {
-          socket.emit("updateLocation", {
-            position: hostRooom.position,
-          });
-        }
-      });
-
       socket.on("userLeftRoom", (data) => {
         setHostRoom((prev) => {
           if (prev) {
@@ -192,7 +165,7 @@ export const LocationProvider = ({
           }
           return null;
         });
-        toast.info(`${data.userName} left the room`, {
+        toast.info(`${data.userName} is now offline.`, {
           autoClose: 2000,
         });
       });
@@ -260,11 +233,40 @@ export const LocationProvider = ({
 
   useEffect(() => {
     if (socket) {
-      socket.emit("updateLocation", {
-        position: hostRooom?.position,
+      socket.on("userJoinedRoom", (data) => {
+        setHostRoom((prev) => {
+          if (prev) {
+            return {
+              ...prev,
+              totalConnectedUsers: prev.totalConnectedUsers.find(
+                (user) => user.userId === data.userId
+              )
+                ? prev.totalConnectedUsers
+                : [...prev.totalConnectedUsers, data],
+            };
+          }
+          return null;
+        });
+        // setVisitorRoomInfo(data);
+
+        toast.info(`${data.userName} watches your location.`, {
+          autoClose: 2000,
+        });
+
+        if (hostRooom?.position) {
+          socket.emit("updateLocation", {
+            position: hostRooom.position,
+          });
+        }
       });
+
+      if (hostRooom?.position) {
+        socket.emit("updateLocation", {
+          position: hostRooom?.position,
+        });
+      }
     }
-  }, [hostRooom?.position]);
+  }, [hostRooom?.position, socket]);
 
   return (
     <LocationContext.Provider
