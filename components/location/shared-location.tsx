@@ -96,6 +96,8 @@ export function SharedLocationPage() {
                       <p className="text-gray-500 dark:text-gray-40 dark:bg-gray-700 dark:text-white flex gap-2 px-2 items-center bg-gray-50 py-1.5  rounded-sm ">
                         <SquareUserRound className="w-4 h-4 text-green-700 dark:text-green-200" />
                         {visitorRoomInfo.hostName}
+                        lat:{visitorRoomInfo?.position.lat} lng:
+                        {visitorRoomInfo?.position.lng}
                       </p>
                       <p className="text-gray-500 dark:text-gray-40 dark:bg-gray-700 dark:text-white flex gap-2 px-2 items-center bg-gray-50 py-1.5  rounded-sm ">
                         <Mail className="w-4 h-4 text-green-700 dark:text-green-200" />

@@ -9,7 +9,8 @@ import ConnectedUser from "./connected-user";
 import ShareLocation from "./share-location";
 
 function HomePage() {
-  const { connectSocket, socket, userInfo } = useContext(LocationContext);
+  const { connectSocket, socket, userInfo, hostRooom } =
+    useContext(LocationContext);
 
   // when component mounts connect to socket
   useEffect(() => {
@@ -32,7 +33,8 @@ function HomePage() {
                   htmlFor="current-location"
                   className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
                 >
-                  Current Location
+                  Current Location lat:{hostRooom?.position.lat} lng:
+                  {hostRooom?.position.lng}
                 </Label>
                 <div className="flex items-center bg-gray-100 dark:bg-gray-700 p-2 rounded-md gap-2">
                   <div>
