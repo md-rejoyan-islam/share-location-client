@@ -16,6 +16,7 @@ interface LocationContextType {
   setUserInfo: (user: userInfo) => void;
   setVisitorRoomInfo: (visitorRoomInfo: visitorRoom) => void;
   visitorRoomInfo: visitorRoom;
+  position: { lat: number; lng: number };
 }
 
 const LocationContext = createContext<LocationContextType>({
@@ -44,6 +45,7 @@ const LocationContext = createContext<LocationContextType>({
   },
   setUserInfo: () => {},
   setVisitorRoomInfo: () => {},
+  position: { lat: 0, lng: 0 },
 });
 
 export default LocationContext;

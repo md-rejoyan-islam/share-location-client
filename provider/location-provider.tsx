@@ -313,6 +313,7 @@ export const LocationProvider = ({
         hostRooom,
         setHostRoom,
         setVisitorRoomInfo,
+        position,
       }}
     >
       {children}
