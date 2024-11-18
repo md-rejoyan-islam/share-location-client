@@ -21,7 +21,7 @@ export default function ShareLocation({}) {
   });
   const { toast } = useToast();
 
-  console.log(hostRooom);
+  // console.log(hostRooom);
 
   // handle share location
   const handleShareLocation = async () => {

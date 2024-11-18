@@ -60,6 +60,11 @@ export const LocationProvider = ({
   const [socketStatus, setSocketStatus] =
     useState<SocketStatus>("DISCONNECTED");
 
+  const [position, setPosition] = useState<{ lat: number; lng: number }>({
+    lat: 0,
+    lng: 0,
+  });
+
   const [userInfo, setUserInfo] = useState<userInfo>({
     name: "",
     email: "",
@@ -79,12 +84,23 @@ export const LocationProvider = ({
     location: "",
   });
 
+  console.log(position);
+  // host
+  console.log("HOST");
+
+  console.log(hostRooom?.position);
+
   // Get the current location
   useEffect(() => {
     // Ensure the geolocation code runs only in the browser
     if (typeof window !== "undefined" && navigator.geolocation) {
       const watcherId = navigator.geolocation.watchPosition(
         (position) => {
+          setPosition({
+            lat: position.coords.latitude,
+            lng: position.coords.longitude,
+          });
+
           // fetch location from lat and lng
           fetchLocation(
             position.coords.latitude,
@@ -267,6 +283,20 @@ export const LocationProvider = ({
       }
     }
   }, [hostRooom?.position, socket]);
+
+  useEffect(() => {
+    if (position) {
+      setHostRoom((prev) => {
+        if (prev) {
+          return {
+            ...prev,
+            position: position,
+          };
+        }
+        return null;
+      });
+    }
+  }, [position]);
 
   return (
     <LocationContext.Provider
