@@ -13,7 +13,7 @@ function HomePage() {
   const { userInfo } = useContext(LocationContext);
 
   return (
-    <div className={` flex flex-col `}>
+    <div className={` flex flex-co`}>
       <div className="flex-1 px-4 pt-6 pb-8 bg-gray-100 dark:bg-gray-900 transition-colors duration-200">
         <div className="max-w-6xl mx-auto bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden">
           <div className="flex flex-col md:flex-row">
