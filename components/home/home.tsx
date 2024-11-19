@@ -3,24 +3,14 @@
 import { Label } from "@/components/ui/label";
 import LocationContext from "@/context/location-context";
 import { MapPin } from "lucide-react";
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
 import GoogleMap from "../google-map";
+import PopupDialog from "../popup-dialog";
 import ConnectedUser from "./connected-user";
 import ShareLocation from "./share-location";
 
 function HomePage() {
-  const { connectSocket, socket, userInfo, hostRooom, position } =
-    useContext(LocationContext);
-
-  // when component mounts connect to socket
-  useEffect(() => {
-    connectSocket();
-    return () => {
-      if (socket?.connected) {
-        socket.disconnect();
-      }
-    };
-  }, []);
+  const { userInfo } = useContext(LocationContext);
 
   return (
     <div className={` flex flex-col `}>
@@ -33,11 +23,12 @@ function HomePage() {
                   htmlFor="current-location"
                   className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
                 >
-                  Current Location lat:{hostRooom?.position.lat} lng:
+                  Current Location
+                  {/* lat:{hostRooom?.position.lat} lng:
                   {hostRooom?.position.lng}
                   <br />
-                  {position.lat} lng:
-                  {position.lng}
+                  {userInfo.position.lat} lng:
+                  {userInfo.position.lng} */}
                 </Label>
                 <div className="flex items-center bg-gray-100 dark:bg-gray-700 p-2 rounded-md gap-2">
                   <div>
@@ -69,6 +60,12 @@ function HomePage() {
           </div>
         </div>
       </div>
+      <PopupDialog
+        title="Share Your Location"
+        description={
+          "To share your location with others, please provide some information."
+        }
+      />
     </div>
   );
 }
