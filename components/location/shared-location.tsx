@@ -134,7 +134,7 @@ export function SharedLocationPage() {
               <div className="h-[400px] md:h-[600px]">
                 <GoogleMap
                   location={visitorRoomInfo.location}
-                  position={visitorRoomInfo?.position || { lat: 0, lng: 0 }}
+                  position={visitorRoomInfo?.hostPosition || { lat: 0, lng: 0 }}
                 />
               </div>
             </div>
