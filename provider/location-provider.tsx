@@ -33,6 +33,13 @@ export const LocationProvider = ({
   const [visitorRoomInfo, setVisitorRoomInfo] =
     useState<VISITOR_IN_ROOM>(defaultVisitorInRoom);
 
+  console.log("user position");
+
+  console.log(userInfo.position);
+  console.log("host position");
+
+  console.log(hostRooom.position);
+
   // Get the current location and update the user info
   useEffect(() => {
     // Ensure the geolocation code runs only in the browser
@@ -40,6 +47,7 @@ export const LocationProvider = ({
       const watcherId = navigator.geolocation.watchPosition(
         (position) => {
           // fetch location from lat and lng and update user info
+
           fetchLocation(
             position.coords.latitude,
             position.coords.longitude
@@ -52,6 +60,17 @@ export const LocationProvider = ({
               },
               location,
             }));
+
+            setHostRoom((prev) => {
+              return {
+                ...prev,
+                position: {
+                  lat: position.coords.latitude,
+                  lng: position.coords.longitude,
+                },
+                location,
+              };
+            });
           });
         },
         (error) => {
@@ -169,17 +188,21 @@ export const LocationProvider = ({
 
       // when update location
       socket.on("updateLocationResponse", (data) => {
-        fetchLocation(data.position.lat, data.position.lng).then((location) => {
-          setVisitorRoomInfo((prev) => {
-            return {
-              ...prev,
-              position: data.position,
-              hostPosition: data.hostPosition,
-              updatedAt: new Date(),
-              location,
-            };
-          });
-        });
+        console.log("updateLocationResponse", data);
+
+        fetchLocation(data.hostPosition.lat, data.hostPosition.lng).then(
+          (location) => {
+            setVisitorRoomInfo((prev) => {
+              return {
+                ...prev,
+                position: data.position,
+                hostPosition: data.hostPosition,
+                updatedAt: new Date(),
+                location,
+              };
+            });
+          }
+        );
       });
       // socket.on("disconnect", (data) => {
       //   setSocketStatus("DISCONNECTED");
@@ -209,14 +232,14 @@ export const LocationProvider = ({
   }, [socket]);
 
   useEffect(() => {
-    if (socket) {
-      if (hostRooom?.position.lat) {
+    if (socket && hostRooom.roomId) {
+      if (userInfo?.position.lat) {
         socket.emit("updateLocation", {
-          hostPosition: hostRooom?.position,
+          hostPosition: userInfo?.position,
         });
       }
     }
-  }, [hostRooom?.position, socket]);
+  }, [userInfo?.position, socket, hostRooom.roomId]);
 
   return (
     <LocationContext.Provider
